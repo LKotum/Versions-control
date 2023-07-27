@@ -5,3 +5,6 @@ __pycache__
 /.vscode
 /start.bat
 /start.sh
+/venv
+/.python-version
+/logs/*

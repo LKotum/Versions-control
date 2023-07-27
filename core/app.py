@@ -1,31 +1,29 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from .modules.auth import *
+from .modules.tokenControl import *
 
 class app:
 	def __init__(self, **kwargs):
 		self.rs = kwargs['RESPONSE_SERVICE']
+		self.config = kwargs['CONFIG']
+		self.token_service = controller()
+		self.auth_service = account(self.token_service)
 		self.responses()
 
 	def responses(self):
-		@self.rs.get("/{server_token}/{app_token}")
-		def get_app_latest_version(server_token, app_token):
-			''' '''
+		@self.rs.get("/")
+		def get_main():
+			raise HTTPException(status_code=418)
+
+
+		@self.rs.post("/auth")
+		def post_auth(token_server, token_user):
+			self.auth_service.authorize(token_server, token_user)
+
+		@self.rs.post("/add/app/")
+		def post_addApp(token_ACK):
 			...
 
-
-		@self.rs.post("/add_app/{server_token}")
-		def add_app(server_token, user_token):
-			''' '''
+		@self.rs.post("/add/version/")
+		def post_addVersion(token_ACK, token_app, version: str):
 			...
-
-
-		@self.rs.post("/rm-app/{server_token}/{app_token}")
-		def rm_app(server_token, app_token, user_token):
-			''' '''
-			...
-
-
-		@self.rs.post("/add_version/{server_token}/{app_token}")
-		def add_app_version(server_token, app_token, user_token):
-			''' '''
-			...
-
